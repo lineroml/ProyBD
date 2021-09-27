@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn-disabled {
+  @apply px-4 py-2 font-medium border-2 text-white bg-gray-400 border-gray-400  rounded-md shadow-lg  focus:outline-none;
+}
+.btn-primary {
+  @apply px-4 py-2 font-medium border-2 text-white bg-blue-600 border-blue-600 rounded-md shadow-lg hover:bg-white hover:text-blue-600 hover:shadow-inner focus:outline-none;
+}
+
+.btn-redirect {
+  @apply ripple-bg-darkAguaMarina px-4 py-2 w-full font-medium border-2 text-black bg-aguaMarina border-aguaMarina rounded-md shadow-lg hover:bg-darkAguaMarina hover:text-black hover:shadow-inner focus:outline-none;
+}
+
+.header-list {
+  @apply mr-2.5 pr-2.5;
+}
+
+@font-face {
+}
+
+.btn-inverted {
+  @apply ripple-bg-darkAguaMarina px-4 py-2  font-medium border-2 text-black bg-aguaMarina border-aguaMarina rounded-b-lg shadow-lg hover:bg-darkAguaMarina hover:text-black hover:shadow-inner focus:outline-none;
+}
+
+@layer utilities {
+  .slick-prev {
+    left: 3% !important;
+    z-index: 1;
+  }
+  .slick-next {
+    right: 3% !important;
+    z-index: 1;
+  }
+}
