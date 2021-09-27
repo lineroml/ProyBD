@@ -26,7 +26,7 @@ const Home = () => {
             </button>
           </div>
           <div className=' w-full sm:w-1/2 flex justify-center h-1/2'>
-            <button onClick={() => router.push('/niños')} type='button' className='btn-redirect'>
+            <button onClick={() => router.push('/hijos')} type='button' className='btn-redirect'>
               Niños{' '}
             </button>
           </div>
