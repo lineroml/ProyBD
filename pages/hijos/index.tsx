@@ -49,6 +49,7 @@ const Hijos = ({ hijosProp }) => {
             message: `Actualizado con éxito.`,
             type: 'success',
           });
+          router.reload();
         } else {
           setToastState({
             message: `Ha ocurrido un error`,

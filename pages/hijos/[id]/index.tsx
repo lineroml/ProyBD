@@ -31,7 +31,7 @@ export async function getServerSideProps(context) {
 const Hijo = ({ hijo }) => {
   const [nombre, setNombre] = useState(hijo.nombre ?? '');
   const { setToastState } = useToast();
-
+  const router = useRouter();
   const update = async (e) => {
     e.preventDefault();
     try {
