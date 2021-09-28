@@ -55,7 +55,7 @@ const Table = ({ registros = [], link = '' }) => {
               <div className='bg-aguaMarinaClaro  rounded-t-lg py-4'>Nombre</div>
             </div>
             <div className='text-center w-1/3 sm:w-1/4  sm:px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light'>
-              <div className='bg-aguaMarinaClaro rounded-t-lg py-4'>Documento</div>
+              <div className='bg-aguaMarinaClaro rounded-t-lg py-4'>ID</div>
             </div>
             <div className=' text-center w-1/3 sm:w-2/4  sm:px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light'>
               <div className='bg-aguaMarinaClaro    rounded-t-lg  py-4'>Acciones</div>
