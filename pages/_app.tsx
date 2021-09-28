@@ -4,7 +4,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { ToastContext } from 'context/toast';
 import { useState, useEffect } from 'react';
-
 function MyApp({ Component, pageProps }: AppProps) {
   const [toastState, setToastState] = useState({
     message: '',

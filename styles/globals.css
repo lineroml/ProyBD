@@ -10,7 +10,11 @@
 }
 
 .btn-redirect {
-  @apply ripple-bg-darkAguaMarina px-4 py-2 w-full font-medium border-2 text-black bg-aguaMarina border-aguaMarina rounded-md shadow-lg hover:bg-darkAguaMarina hover:text-black hover:shadow-inner focus:outline-none;
+  @apply ripple-bg-darkAguaMarina px-2 py-2 w-full font-medium border-2 text-black bg-aguaMarina border-aguaMarina rounded-md shadow-lg hover:bg-darkAguaMarina hover:text-black hover:shadow-inner focus:outline-none;
+}
+
+.btn-cancel {
+  @apply ripple-bg-aguaMarinaClaro px-2 py-2 w-full font-medium border-2 text-black bg-aguaMarinaClaro border-aguaMarinaClaro rounded-md shadow-lg hover:bg-aguaMarinaClaro hover:text-black hover:shadow-inner focus:outline-none;
 }
 
 .header-list {
@@ -32,5 +36,16 @@
   .slick-next {
     right: 3% !important;
     z-index: 1;
+  }
+  .slick-container,
+  .slick-slider,
+  .slick-list,
+  .slick-track {
+    height: 100%;
+  }
+  .slick-slide > div {
+    height: 100%;
+    display: flex;
+    justify-content: center;
   }
 }

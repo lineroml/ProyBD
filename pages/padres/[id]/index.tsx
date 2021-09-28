@@ -10,32 +10,47 @@ import 'slick-carousel/slick/slick-theme.css';
 import Modal from 'components/modal';
 import axios from 'axios';
 import safeJsonStringify from 'safe-json-stringify';
-import { useEffect } from 'react-transition-group/node_modules/@types/react';
 import { useToast } from 'context/toast';
-
+import Select from 'react-select';
+import HeaderPage from 'components/headerPage';
 export async function getServerSideProps(context) {
   const { id } = context.query;
   let padre;
   let hijos;
+  let hijosSinPadres;
   try {
     const responsePadre = await axios.get(`https://bienestarapi.herokuapp.com/api/padres/${id}/`);
     padre = responsePadre.data;
     hijos = padre.hijos;
+
+    const responseSinPadres = await axios.get(
+      `https://bienestarapi.herokuapp.com/api/hijos/sinpadre`
+    );
+    hijosSinPadres = responseSinPadres.data;
   } catch (e) {}
   return {
     props: {
       padre: JSON.parse(safeJsonStringify(padre ?? [])),
       hijos: JSON.parse(safeJsonStringify(hijos ?? [])),
+      hijosSinPadre: JSON.parse(safeJsonStringify(hijosSinPadres ?? [])),
     },
   };
 }
 
-const Padre = ({ padre, hijos = [] }) => {
+const Padre = ({ padre, hijos = [], hijosSinPadre = [] }) => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
+
   const [nombre, setNombre] = useState(padre.nombre ?? '');
-  const [nombreHijo, setNombreHijo] = useState('');
+  const [selectedHijo, setSelectedHijo] = useState(null);
   const { setToastState } = useToast();
   const router = useRouter();
+  const [hijosOptions] = useState(
+    hijosSinPadre?.map((hijo) => ({
+      value: hijo.id,
+      label: hijo.nombre,
+    }))
+  );
+  //[  {value: " ",label: " "},{value: " ",label: " "},{value: " ",label: " "},{value: " ",label: " "}  ]
   const settings = {
     infinite: true,
     speed: 500,
@@ -60,28 +75,30 @@ const Padre = ({ padre, hijos = [] }) => {
     ],
   };
 
-  const crear = async (e) => {
+  const updateHijos = async (e) => {
     e.preventDefault();
     try {
       const data = {
-        nombre: nombreHijo,
+        nombre: selectedHijo.label,
         hijode: padre.id,
       };
 
-      await axios.post(`https://bienestarapi.herokuapp.com/api/hijos`, data).then((res) => {
-        if (res.status === 200) {
-          setToastState({
-            message: `Creado con éxito.`,
-            type: 'success',
-          });
-          router.reload();
-        } else {
-          setToastState({
-            message: `Ha ocurrido un error`,
-            type: 'error',
-          });
-        }
-      });
+      await axios
+        .put(`https://bienestarapi.herokuapp.com/api/hijos/${selectedHijo.value}`, data)
+        .then((res) => {
+          if (res.status === 200) {
+            setToastState({
+              message: `Adoptado con éxito.`,
+              type: 'success',
+            });
+            router.reload();
+          } else {
+            setToastState({
+              message: `Ha ocurrido un error`,
+              type: 'error',
+            });
+          }
+        });
     } catch (e) {
       console.log('error', e);
     }
@@ -115,32 +132,48 @@ const Padre = ({ padre, hijos = [] }) => {
 
   return (
     <div className='h-screen flex animate-fade-in-down flex-col justify-center  items-center  '>
-      <Modal open={openCreateModal} setOpen={setOpenCreateModal} modalTitle='Agregar Hijo'>
+      <Modal open={openCreateModal} setOpen={setOpenCreateModal} modalTitle='Adoptar Hijo'>
         <div className='flex space-y-3 flex-col '>
-          <Input
+          {/*<Input
             name='childName'
             text='Nombre Hijo:  '
             value={nombreHijo}
             onChange={setNombreHijo}
             type='text'
-          />
+          />*/}
+          <div className='px-2  '>
+            <span></span>
+            <Select
+              menuPlacement='auto'
+              menuPosition='fixed'
+              defaultValue={[]}
+              isSearchable
+              name='child'
+              options={hijosOptions}
+              value={selectedHijo}
+              placeholder='Seleccione un hijo...'
+              onChange={(selected) => setSelectedHijo(selected)}
+            />
+          </div>
           <div className='w-full flex justify-end px-2'>
             <div className=' w-full sm:w-1/2   h-1/2'>
-              <button onClick={(e) => crear(e)} type='button' className='btn-redirect'>
-                Crear{' '}
+              <button onClick={(e) => updateHijos(e)} type='button' className='btn-redirect'>
+                Guardar{' '}
               </button>
             </div>
           </div>
         </div>
       </Modal>
+
       {/*DIVIDAMOS DOS SECCIONES DE 50% DE ALTURA PARA LOS COMPONENTES */}
       <div className='h-1/2 w-full flex-col-reverse  space-x-0 sm:space-x-4 sm:w-1/2 flex justify-center items-center border-b border-gray-400   sm:flex-row '>
+        <HeaderPage title={nombre} />
         {/*TENEMOS 2 SECCIONES INTERNAS ,LA IZQUIERDA (NOMBRE Y ID) Y LA DE LA DERECHA( LA IMAGEN) */}
         <div className='w-full px-4 flex justify-center items-center flex-col space-y-3  '>
           {/*campos en fila de nombre, id y botón de editar , deben ser inputs para que sean modificables */}
           <Input name='name' text='Nombre:  ' value={nombre} onChange={setNombre} type='text' />
           <Input name='id' text='ID:  ' readOnly value={padre.id} type='text' />
-          <div className=' w-full sm:w-3/5 md:w-1/5  py-2 sm:py-0 flex justify-center self-end '>
+          <div className=' w-full sm:w-3/5 md:w-2/5 px-2 py-2 sm:py-0 flex justify-center self-end '>
             <button onClick={(e) => update(e)} type='button' className='btn-redirect  '>
               Guardar
             </button>
@@ -162,7 +195,9 @@ const Padre = ({ padre, hijos = [] }) => {
       </div>
       <div className='w-full sm:w-1/2 px-4 flex flex-row '>
         <div className='w-1/2'>
-          <button className=' btn-inverted'>Niños a cargo</button>
+          <button disabled className=' btn-inverted'>
+            Niños a cargo
+          </button>
         </div>
         <div className='w-1/2 flex justify-end'>
           {' '}
@@ -171,14 +206,18 @@ const Padre = ({ padre, hijos = [] }) => {
           </button>
         </div>
       </div>
-      <div className='h-1/2 w-full px-2 sm:px-0 sm:w-2/3 flex justify-center items-center   '>
+      <div className='h-1/2 w-full px-2   sm:px-0 sm:w-2/3 flex justify-center items-center   '>
         {/*parte de abajo */}
         {/*card Gris */}
-        <div className=' h-2/3 max-w-full'>
+        <div className=' py-4 h-full w-full   relative max-w-full'>
           {hijos.length > 0 ? (
-            <Slider className='bg-gray-300   rounded-lg  ' {...settings}>
+            <Slider className='bg-gray-300 p-4  rounded-lg  ' {...settings}>
               {hijos.map((hijo) => {
-                return <Card key={`hijo${hijo.id}`} name={hijo.nombre} id={hijo.id} />;
+                return (
+                  <>
+                    <Card key={`hijo${hijo.id}`} name={hijo.nombre} id={hijo.id} />
+                  </>
+                );
               })}
             </Slider>
           ) : (

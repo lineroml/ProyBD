@@ -33,7 +33,7 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
         <div className='text-xl lg:text-2xl font-medium  self-center text-morado w-5/6'>
           {children}
         </div>
-        <div className=' w-1/6'>
+        <div className='text-center w-1/6'>
           <IconButton
             aria-label='close'
             className={classes.closeButton}
@@ -51,6 +51,9 @@ const DialogContent = withStyles(() => ({
   root: {
     placeSelf: 'center',
     width: '100%',
+    height: 'auto',
+    maxHeight: '100%',
+    overflow: 'visible !important',
   },
 }))(MuiDialogContent);
 
