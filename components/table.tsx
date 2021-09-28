@@ -55,9 +55,18 @@ const Table = ({ registros = [], link = '' }) => {
             <div className='text-center w-1/3 sm:w-1/4 px-1 sm:px-6 font-bold uppercase text-sm text-grey-dark border-b border-grey-light'>
               <div className='bg-aguaMarinaClaro  rounded-t-lg py-4'>Nombre</div>
             </div>
-            <div className='text-center w-1/3 sm:w-1/4 px-1 sm:px-6 font-bold uppercase text-sm text-grey-dark border-b border-grey-light'>
+            <div
+              className={`text-center w-1/3 ${
+                !esHijo ? 'sm:w-1/5' : 'sm:w-1/4'
+              } px-1 sm:px-6 font-bold uppercase text-sm text-grey-dark border-b border-grey-light`}
+            >
               <div className='bg-aguaMarinaClaro rounded-t-lg py-4'>ID</div>
             </div>
+            {!esHijo ? (
+              <div className='text-center w-1/3 sm:w-1/5 px-1 sm:px-6 font-bold uppercase text-sm text-grey-dark border-b border-grey-light'>
+                <div className='bg-aguaMarinaClaro rounded-t-lg py-4'>No. Hijos</div>
+              </div>
+            ) : null}
             {link === '/hijos/' ? (
               <div className='text-center w-1/3 sm:w-1/4 px-1 sm:px-6 font-bold uppercase text-sm text-grey-dark border-b border-grey-light'>
                 <div className='bg-aguaMarinaClaro rounded-t-lg py-4'>Padre</div>
@@ -80,12 +89,20 @@ const Table = ({ registros = [], link = '' }) => {
                 return (
                   <div
                     key={registro.id}
-                    className='hover:bg-grey-lighter text-center flex flex-row  border-b border-grey-lighter bg-gray-300  items-center rounded-full '
+                    className='hover:bg-grey-lighter text-center flex flex-row  border-b border-grey-lighter bg-gray-300  items-center sm:rounded-full rounded-3xl'
                   >
                     <div className='py-2 px-1 sm:px-6  w-1/4 '>
                       {registro.nombre ?? 'Sin Nombre'}
                     </div>
-                    <div className='py-2 px-1 sm:px-6  w-1/4  '>{registro.id}</div>
+                    <div className={`py-2 px-1 sm:px-6  ${!esHijo ? 'w-1/4 sm:w-1/5' : 'w-1/4'}  `}>
+                      {registro.id}
+                    </div>
+                    {!esHijo ? (
+                      <div className='py-2 px-1 sm:px-6 sm:w-1/5 w-1/4'>
+                        {' '}
+                        {registro.numHijos ?? '0'}
+                      </div>
+                    ) : null}
                     {esHijo ? (
                       <div className='py-2 px-1 sm:px-6  w-1/4  '>
                         {registro?.nombrePadre ?? 'Sin Padre'}
@@ -96,23 +113,17 @@ const Table = ({ registros = [], link = '' }) => {
                         esHijo ? 'sm:w-1/4 ' : 'sm:w-2/4 '
                       }   items-center space-x-0 sm:space-y-0 space-y-2 sm:space-x-4   self-center flex justify-center flex-col sm:flex-row  `}
                     >
-                      {!esHijo ? (
-                        <div className='h-full w-full sm:w-1/2 flex justify-center  '>
-                          <button
-                            onClick={() => router.push(`${link}${registro.id}`)}
-                            type='button'
-                            className='btn-redirect'
-                          >
-                            Ver{' '}
-                          </button>
-                        </div>
-                      ) : null}
+                      <div className='h-full w-full sm:w-1/2 flex justify-center  '>
+                        <button
+                          onClick={() => router.push(`${link}${registro.id}`)}
+                          type='button'
+                          className='btn-redirect'
+                        >
+                          Ver{' '}
+                        </button>
+                      </div>
 
-                      <div
-                        className={` w-full ${
-                          esHijo ? 'sm:w-2/3 ' : 'sm:w-1/2 '
-                        } flex justify-center items-end `}
-                      >
+                      <div className={`  w-full sm:w-1/2   flex justify-center items-end `}>
                         <button
                           onClick={(e) => {
                             deleteRegister(e, registro.id);

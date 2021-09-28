@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { ToastContext } from 'context/toast';
 import { useState, useEffect } from 'react';
+import Script from 'next/script';
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [toastState, setToastState] = useState({
     message: '',
@@ -29,10 +31,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [toastState]);
 
   return (
-    <ToastContext.Provider value={{ setToastState }}>
-      <Component {...pageProps} />
-      <ToastContainer />
-    </ToastContext.Provider>
+    <>
+      <Script src='https://kit.fontawesome.com/433667d0d8.js' strategy='beforeInteractive' />
+      <ToastContext.Provider value={{ setToastState }}>
+        <Component {...pageProps} />
+        <ToastContainer />
+      </ToastContext.Provider>
+    </>
   );
 }
 export default MyApp;

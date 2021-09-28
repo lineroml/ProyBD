@@ -12,10 +12,10 @@ const HeaderPage = ({ title }) => {
       <h1 className='flex'>
         <button
           type='button'
-          className='mr-2 focus:outline-none flex items-center'
+          className='mr-2 focus:outline-none flex items-center btn-redirect'
           onClick={() => router.back()}
         >
-          <i className='fas fa-arrow-left text-2xl text-gray-700 hover:text-opacity-80' />
+          <i className=' sm:px-6 px-2 fas fa-arrow-left text-2xl text-black hover:text-opacity-80' />
         </button>
       </h1>
     </div>
